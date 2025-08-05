@@ -1,0 +1,51 @@
+import streamlit as st
+import subprocess
+import ollama
+st.set_page_config(layout="wide")
+#st.expander()
+import re
+
+def remove_ansi_codes(text):
+    ansi_escape = re.compile(r'\x1B$$[0-?]*[ -/]*[@-~]')
+    return ansi_escape.sub('', text)
+
+output = "[35mSystem[0m..."  # your raw output string
+clean_output = remove_ansi_codes(output)
+st.text(clean_output)
+import re
+
+def remove_ansi_codes(text):
+    ansi_escape = re.compile(r'\x1B$$[0-?]*[ -/]*[@-~]')
+    return ansi_escape.sub('', text)
+
+output = "[35mSystem[0m..."  # your raw output string
+clean_output = remove_ansi_codes(output)
+#st.text(clean_output)
+
+
+# Set the title of the app
+st.title("Pentest Basic scan")
+
+# Add input field for user text
+user_input = st.text_input(
+    "Leave Blank Or Enter More  Questions Here: Example, ask to scan specific domains or ip addresses.",
+    value=""
+)
+
+if st.button("Click Here To Start Pen-Test (nmap) Analysis"):
+    try:
+        # Execute script with user input as argument
+        result = subprocess.run(
+            ['', user_input],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        
+        # Display the output of the script was st.code(result.stdout) and st.text(result.stdout) or st.code(clean_output, language='bash')
+        st.success("AI Analysis Output:")
+        st.text(clean_output)
+    
+    except subprocess.CalledProcessError as e:
+        # Handle any errors that occur during script execution
+        st.error(f"Error: {e}\n{e.stderr}")
